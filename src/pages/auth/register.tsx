@@ -14,7 +14,7 @@ import { UserSchema } from '@/schemas/user.schema';
 import { setUser } from '@/redux/features/authSlice';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { Button } from '@/components/ui/button';
-import { addUserId } from '@/redux/features/cartSlice';
+import BackButton from '@/components/common/back-button';
 
 type TRegisterFormData = {
   name: string;
@@ -55,11 +55,11 @@ const RegisterPage = () => {
       const res = await userRegister(registerData).unwrap();
 
       const role = res.data?.user?.role;
-      const userId = res.data?.user?._id;
+
       dispatch(
         setUser({ user: res.data?.user, token: res.data?.accessToken }),
       );
-      dispatch(addUserId(userId));
+
       toast.success('Register success!', { id: toastId, duration: 2000 });
       navigate(`/dashboard/${role}/home`);
     } catch (error: any) {
@@ -81,7 +81,7 @@ const RegisterPage = () => {
 
         <div className="relative z-10 flex justify-center w-full">
           <motion.div
-            className="w-full max-w-md p-1 bg-white rounded shadow md:p-8"
+            className="relative w-full max-w-md p-1 bg-white rounded shadow md:p-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -285,6 +285,9 @@ const RegisterPage = () => {
                 </Link>
               </p>
             </motion.div>
+            <div className="absolute left-5 top-5">
+              <BackButton />
+            </div>
           </motion.div>
         </div>
       </div>

@@ -6,20 +6,20 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   const images = product?.images || [];
   const coverImage = images.length > 0 && images[0];
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-white shadow-md">
+    <div className="relative overflow-hidden bg-white rounded-lg shadow-md group">
       <div className="aspect-[16/9]">
         {/* Set the aspect ratio here */}
         <img
           src={coverImage || defaultProductImage}
           alt="product"
-          className="h-full w-full rounded object-cover"
+          className="object-cover w-full h-full rounded"
         />
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
         <Link
           to={`/product-details/${product?._id}`}
-          className="rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white hover:bg-green-800"
+          className="px-4 py-2 text-sm font-medium text-white bg-green-900 rounded-md hover:bg-green-800"
         >
           See Details
         </Link>

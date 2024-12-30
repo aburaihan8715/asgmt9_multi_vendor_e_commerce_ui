@@ -13,7 +13,8 @@ import { toast } from 'sonner';
 import { setUser } from '@/redux/features/authSlice';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { Button } from '@/components/ui/button';
-import { addUserId } from '@/redux/features/cartSlice';
+
+import BackButton from '@/components/common/back-button';
 
 interface LoginFormValues {
   email: string;
@@ -50,13 +51,13 @@ const LoginPage = () => {
       };
       const res = await login(userInfo).unwrap();
       const role = res.data?.user?.role;
-      const userId = res.data?.user?._id;
+
       const navigateTo =
         location?.state?.from?.pathname || `/${role}/dashboard`;
       dispatch(
         setUser({ user: res.data?.user, token: res.data?.accessToken }),
       );
-      dispatch(addUserId(userId));
+
       toast.success('login success!', { id: toastId, duration: 2000 });
       navigate(`${navigateTo}`);
     } catch (error: any) {
@@ -78,7 +79,7 @@ const LoginPage = () => {
 
         <div className="relative z-10 flex justify-center w-full">
           <motion.div
-            className="w-full max-w-md p-1 bg-white rounded-lg shadow-lg md:p-8"
+            className="relative w-full max-w-md p-1 bg-white rounded-lg shadow-lg md:p-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -101,7 +102,7 @@ const LoginPage = () => {
                       Email
                     </label>
                     <Link
-                      to="/forget-password"
+                      to="/auth/forget-password"
                       className="text-sm text-green-700 hover:text-green-800"
                     >
                       Forget Password?
@@ -192,6 +193,10 @@ const LoginPage = () => {
                 </Link>
               </p>
             </motion.div>
+
+            <div className="absolute left-5 top-5">
+              <BackButton />
+            </div>
           </motion.div>
         </div>
       </div>

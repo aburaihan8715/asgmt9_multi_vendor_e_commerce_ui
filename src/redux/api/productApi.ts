@@ -14,7 +14,7 @@ const productApi = baseApi.injectEndpoints({
 
     // GET ALL PRODUCTS
     getAllProducts: builder.query({
-      query: ({ searchQuery, page, limit }) => {
+      query: ({ searchQuery, page, limit, sortValue }) => {
         let queryString = `/api/v1/products`;
 
         const params = new URLSearchParams();
@@ -22,11 +22,35 @@ const productApi = baseApi.injectEndpoints({
         if (searchQuery) params.append('searchTerm', searchQuery);
         if (page) params.append('page', page);
         if (limit) params.append('limit', limit);
+        if (sortValue) {
+          if (sortValue === 'asc') {
+            params.append('sort', 'name');
+          } else if (sortValue === 'desc') {
+            params.append('sort', '-name');
+          } else if (sortValue === 'price-high') {
+            params.append('sort', '-price');
+          } else if (sortValue === 'price-low') {
+            params.append('sort', 'price');
+          } else if (sortValue === 'default') {
+            params.append('sort', '');
+          }
+        }
 
         if (params.toString()) queryString += `?${params.toString()}`;
 
         return {
           url: queryString,
+          method: 'GET',
+        };
+      },
+      providesTags: ['products'],
+    }),
+
+    // GET FEATURED PRODUCTS
+    getFeaturedProducts: builder.query({
+      query: () => {
+        return {
+          url: '/api/v1/products/featured-products',
           method: 'GET',
         };
       },
@@ -62,4 +86,5 @@ export const {
   useGetAllProductsQuery,
   useGetSingleProductQuery,
   useUpdateProductMutation,
+  useGetFeaturedProductsQuery,
 } = productApi;

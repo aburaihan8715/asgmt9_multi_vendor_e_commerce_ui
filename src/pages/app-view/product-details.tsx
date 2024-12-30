@@ -7,16 +7,20 @@ import { useAppSelector } from '@/redux/hooks';
 import { Rating } from '@smastrom/react-rating';
 import { Link, useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
+
+import defaultProductImage from '@/assets/images/default_product.jpg';
 import {
   useAddToCartMutation,
   useGetCartQuery,
 } from '@/redux/api/cartApi';
+import { ICartItem } from '@/interface/cart.interface';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { data: productData, isLoading: isProductLoading } =
     useGetSingleProductQuery(id);
   const product: IProduct = productData?.data || {};
+  const user = useAppSelector((state) => state.auth.user);
 
   const { data: cartData } = useGetCartQuery(null);
   const [addToCart, { isLoading: isAddToCartLoading }] =
@@ -24,7 +28,10 @@ const ProductDetails = () => {
 
   const cartItems = cartData?.data[0]?.items || [];
 
-  console.log('cartItems', cartItems);
+  const shop = product?.shop;
+  const images = product?.images || [];
+  const coverImage1 = images.length > 0 && images[0];
+  const coverImage2 = images.length > 0 && images[1];
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -39,9 +46,10 @@ const ProductDetails = () => {
       return toast.warning('Product is not available!!');
     }
 
-    const isAlreadyAdded = cartItems.find(
-      (item: any) => item.product._id === product._id,
-    );
+    const isAlreadyAdded = cartItems.find((item: ICartItem) => {
+      const productCart = item.product as IProduct;
+      return productCart._id === product._id;
+    });
 
     if (isAlreadyAdded) {
       return toast.warning('Product already added!');
@@ -49,7 +57,8 @@ const ProductDetails = () => {
 
     const toastId = toast.loading('loading...');
 
-    const cartData = { items: [{ product: product._id }] };
+    const cartData = { items: [{ product: product._id }], shop: shop };
+    console.log(cartData);
     try {
       await addToCart(cartData).unwrap();
       toast.success('Product added successfully!', { id: toastId });
@@ -63,17 +72,23 @@ const ProductDetails = () => {
   return (
     <>
       {(isProductLoading || isAddToCartLoading) && <LoadingWithOverlay />}
-      <section className="h-full px-1 py-10 md:h-[90vh] md:px-10 md:py-20">
-        <div className="flex flex-col h-full gap-10 md:flex-row">
-          <div className="flex-1 h-full">
+      <section className="h-full border px-1 py-10 md:h-[90vh] md:px-10 md:py-20">
+        <div className="flex h-full flex-col gap-10 md:flex-row">
+          <div className="flex h-full flex-1 flex-col gap-2">
             <img
-              className="object-cover w-full h-full rounded"
-              src="https://images.pexels.com/photos/927629/pexels-photo-927629.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt=""
+              src={coverImage1 || defaultProductImage}
+              alt="product"
+              className="h-1/2 w-full rounded object-cover"
+            />
+
+            <img
+              src={coverImage2 || defaultProductImage}
+              alt="product"
+              className="h-1/2 w-full rounded object-cover"
             />
           </div>
 
-          <div className="flex flex-[2] flex-col gap-2 md:gap-5">
+          <div className="flex h-full flex-[2] flex-col gap-2 md:gap-5">
             <h1 className="text-3xl font-medium text-[#212529]">
               {product.name}
             </h1>
@@ -105,11 +120,13 @@ const ProductDetails = () => {
                 Add to Cart
               </Button>
 
-              <Link to="/cart">
-                <Button className="bg-transparent text-neutral-800 ring-1 ring-primary hover:bg-primary hover:text-neutral-50 hover:ring-1">
-                  View Cart
-                </Button>
-              </Link>
+              {user && (
+                <Link to="/cart">
+                  <Button className="bg-transparent text-neutral-800 ring-1 ring-primary hover:bg-primary hover:text-neutral-50 hover:ring-1">
+                    View Cart
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

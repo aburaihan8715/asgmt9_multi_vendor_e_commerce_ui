@@ -5,6 +5,7 @@ import SectionHeading from '@/components/common/section-heading';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
+import BackButton from '@/components/common/back-button';
 
 const PaymentOptionsPage = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -37,14 +38,14 @@ const PaymentOptionsPage = () => {
 
   return (
     <div className="mt-[80px] flex min-h-screen justify-center bg-gray-50 sm:px-6 md:mt-0 md:py-12 lg:px-8">
-      <div className="relative z-10 flex w-full justify-center">
+      <div className="relative z-10 flex justify-center w-full">
         <motion.div
-          className="w-full max-w-md rounded-lg bg-white p-1 shadow-lg md:p-8"
+          className="relative w-full max-w-md p-1 bg-white rounded-lg shadow-lg md:p-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-6 flex justify-center">
+          <div className="flex justify-center mb-6">
             <SectionHeading heading="Select Payment Option" />
           </div>
 
@@ -62,11 +63,11 @@ const PaymentOptionsPage = () => {
                   value="stripe"
                   checked={selectedOption === 'stripe'}
                   onChange={handleOptionChange}
-                  className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-500"
+                  className="w-4 h-4 text-green-700 border-gray-300 focus:ring-green-500"
                 />
                 <label
                   htmlFor="stripe"
-                  className="ml-3 block text-sm font-medium text-gray-800"
+                  className="block ml-3 text-sm font-medium text-gray-800"
                 >
                   Stripe
                 </label>
@@ -79,11 +80,11 @@ const PaymentOptionsPage = () => {
                   value="aamarPay"
                   checked={selectedOption === 'aamarPay'}
                   onChange={handleOptionChange}
-                  className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-500"
+                  className="w-4 h-4 text-green-700 border-gray-300 focus:ring-green-500"
                 />
                 <label
                   htmlFor="aamarPay"
-                  className="ml-3 block text-sm font-medium text-gray-800"
+                  className="block ml-3 text-sm font-medium text-gray-800"
                 >
                   AAmarPay
                 </label>
@@ -96,11 +97,11 @@ const PaymentOptionsPage = () => {
                   value="cashOnDelivery"
                   checked={selectedOption === 'cashOnDelivery'}
                   onChange={handleOptionChange}
-                  className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-500"
+                  className="w-4 h-4 text-green-700 border-gray-300 focus:ring-green-500"
                 />
                 <label
                   htmlFor="cashOnDelivery"
-                  className="ml-3 block text-sm font-medium text-gray-800"
+                  className="block ml-3 text-sm font-medium text-gray-800"
                 >
                   Cash on Delivery
                 </label>
@@ -117,6 +118,9 @@ const PaymentOptionsPage = () => {
               </Button>
             </div>
           </form>
+          <div className="absolute left-5 top-5">
+            <BackButton />
+          </div>
         </motion.div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { Outlet } from 'react-router';
 import ScrollToTop from 'react-scroll-to-top';
 import Header from '../common/header';
 import Footer from '../common/footer';
-import Notification from '../common/notification-v1';
+import Notification from '../common/notification';
 
 const AppLayout = () => {
   return (

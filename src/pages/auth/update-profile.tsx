@@ -16,6 +16,7 @@ import { updateProfile } from '@/redux/features/authSlice';
 import { useNavigate } from 'react-router';
 import { IUser } from '@/interface/user.interface';
 import { Button } from '@/components/ui/button';
+import BackButton from '@/components/common/back-button';
 
 // Interface for the form data
 interface IUpdateProfileFormData {
@@ -105,8 +106,8 @@ const UpdateProfilePage = () => {
   return (
     <>
       {singleUserLoading || (updateUserLoading && <LoadingWithOverlay />)}
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 py-10 md:mt-0">
-        <div className="w-full max-w-lg space-y-6 rounded-lg bg-white p-8 shadow-md">
+      <div className="flex items-center justify-center min-h-screen py-10 bg-gray-100 md:mt-0">
+        <div className="relative w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
           <div className="flex justify-center">
             <SectionHeading heading="Update your profile" />
           </div>
@@ -196,7 +197,7 @@ const UpdateProfilePage = () => {
                   alt="User photo preview"
                   width={96}
                   height={96}
-                  className="mb-4 h-24 w-24 rounded-full object-cover"
+                  className="object-cover w-24 h-24 mb-4 rounded-full"
                 />
               ) : (
                 <img
@@ -208,7 +209,7 @@ const UpdateProfilePage = () => {
                   alt="User photo"
                   width={96}
                   height={96}
-                  className="mb-4 h-24 w-24 rounded-full object-cover"
+                  className="object-cover w-24 h-24 mb-4 rounded-full"
                 />
               )}
 
@@ -221,7 +222,7 @@ const UpdateProfilePage = () => {
               />
               <label
                 htmlFor="photo"
-                className="ml-2 flex w-fit cursor-pointer items-center gap-2 text-xl text-gray-700"
+                className="flex items-center gap-2 ml-2 text-xl text-gray-700 cursor-pointer w-fit"
               >
                 <FaPlusSquare />
                 <span>Image</span>
@@ -232,6 +233,9 @@ const UpdateProfilePage = () => {
               <Button type="submit">Save update</Button>
             </div>
           </form>
+          <div className="absolute left-5 top-5">
+            <BackButton />
+          </div>
         </div>
       </div>
     </>

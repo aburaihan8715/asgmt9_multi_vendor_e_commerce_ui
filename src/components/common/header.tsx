@@ -38,6 +38,9 @@ const Header = () => {
       <li>
         <ActiveLink to="/">Home</ActiveLink>
       </li>
+      <li>
+        <ActiveLink to="/products">Products</ActiveLink>
+      </li>
 
       {role && (
         <li>
@@ -57,16 +60,14 @@ const Header = () => {
   return (
     <>
       {/* DESKTOP NAV */}
-      <header className="sticky top-0 z-50 bg-green-100">
+      <header className="sticky top-0 z-50 bg-primary">
         <div className="z-20 mx-auto hidden h-[80px] w-full max-w-7xl items-center justify-between md:px-5 lg:flex lg:px-10">
           {/* LOGO */}
           <Link to="/">
             <BrandLogo />
           </Link>
           <nav>
-            <ul className="flex gap-4 font-semibold text-gray-700">
-              {menuItems}
-            </ul>
+            <ul className="flex gap-4 text-gray-300">{menuItems}</ul>
           </nav>
 
           {/* LOGIN,PROFILE GROUP */}
@@ -76,8 +77,8 @@ const Header = () => {
               <div className="mt-2">
                 <Link className="" to="/cart">
                   <div className="relative mr-2">
-                    <ShoppingCart className="text-base text-[#212529]" />
-                    <span className="absolute -top-2 left-4 flex h-5 w-5 items-center justify-center rounded-full bg-primary font-semibold text-[#f8f9fa]">
+                    <ShoppingCart className="text-accent" />
+                    <span className="absolute -top-2 left-4 flex h-5 w-5 items-center justify-center rounded-full bg-accent font-semibold text-[#f8f9fa]">
                       {items}
                     </span>
                   </div>
@@ -98,14 +99,21 @@ const Header = () => {
             {!user && (
               <div>
                 <Link to={`/auth/login`}>
-                  <Button>Login</Button>
+                  <Button className="bg-accent hover:bg-accent/75">
+                    Login
+                  </Button>
                 </Link>
               </div>
             )}
 
             {user && (
               <div>
-                <Button onClick={handleLogout}>Logout</Button>
+                <Button
+                  className="bg-accent hover:bg-accent/75"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
               </div>
             )}
           </div>
@@ -114,16 +122,16 @@ const Header = () => {
 
       {/* MOBILE NAV */}
       <header className="lg:hidden">
-        <div className="fixed top-0 z-20 flex h-[80px] w-full items-center justify-between bg-[#e9effd] px-2">
+        <div className="fixed top-0 z-20 flex h-[80px] w-full items-center justify-between bg-primary px-2">
           <div onClick={() => setOpen(!open)} className="">
             {open && (
-              <button className="flex items-center justify-center w-10 h-10 text-3xl border border-primary text-primary">
+              <button className="flex h-10 w-10 items-center justify-center border border-gray-50 text-2xl text-gray-50">
                 <LuMenu />
               </button>
             )}
 
             {!open && (
-              <button className="flex items-center justify-center w-10 h-10 text-3xl border border-primary text-primary">
+              <button className="flex h-10 w-10 items-center justify-center border border-gray-50 text-2xl text-gray-50">
                 <LuX />
               </button>
             )}
@@ -134,8 +142,8 @@ const Header = () => {
             <div className="mt-2">
               <Link className="" to="/cart">
                 <div className="relative mr-2">
-                  <ShoppingCart className="text-base text-[#212529]" />
-                  <span className="absolute -top-2 left-4 flex h-5 w-5 items-center justify-center rounded-full bg-primary font-semibold text-[#f8f9fa]">
+                  <ShoppingCart className="text-accent" />
+                  <span className="absolute -top-2 left-4 flex h-5 w-5 items-center justify-center rounded-full bg-accent font-semibold text-[#f8f9fa]">
                     {items}
                   </span>
                 </div>
@@ -162,7 +170,12 @@ const Header = () => {
 
             {user && (
               <div>
-                <Button onClick={handleLogout}>Logout</Button>
+                <Button
+                  className="bg-accent hover:bg-accent/80"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
               </div>
             )}
           </div>
@@ -170,7 +183,7 @@ const Header = () => {
 
         <nav className="">
           <ul
-            className={`fixed top-[80px] z-20 flex h-full w-[180px] -translate-x-[100%] flex-col gap-2 bg-yellow-50/90 pl-8 pt-5 font-semibold text-[#212529] transition-transform duration-500 ${
+            className={`fixed top-[80px] z-20 flex h-full w-[180px] -translate-x-[100%] flex-col gap-2 bg-primary/95 pl-8 pt-5 font-semibold transition-transform duration-500 ${
               !open && 'translate-x-0'
             }`}
           >
@@ -198,38 +211,29 @@ const ProfilePopover = ({
     <Popover>
       <PopoverTrigger>
         <img
-          className="object-cover w-10 h-10 rounded-full"
+          className="h-10 w-10 rounded-full object-cover"
           src={profilePhoto || defaultUser}
           alt=""
         />
       </PopoverTrigger>
-      <PopoverContent className="mt-5">
+      <PopoverContent className="mt-5 bg-primary/80">
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
         <div className="flex flex-col gap-2">
-          <Link
-            to={`/${role}/dashboard`}
-            className="border-b-2 w-fit border-b-transparent hover:border-b-2 hover:border-b-primary"
-          >
+          <ActiveLink to={`/${role}/dashboard`} className="w-fit">
             Dashboard
-          </Link>
-          <Link
-            to={`/auth/update-profile`}
-            className="border-b-2 w-fit border-b-transparent hover:border-b-2 hover:border-b-primary"
-          >
+          </ActiveLink>
+          <ActiveLink to={`/auth/update-profile`} className="w-fit">
             Update profile
-          </Link>
+          </ActiveLink>
 
-          <Link
-            to={`auth/change-password`}
-            className="border-b-2 w-fit border-b-transparent hover:border-b-2 hover:border-b-primary"
-          >
+          <ActiveLink to={`auth/change-password`} className="w-fit">
             Change password
-          </Link>
+          </ActiveLink>
 
           <button
             onClick={handleLogout}
-            className="text-left border-b-2 w-fit border-b-transparent hover:border-b-2 hover:border-b-primary"
+            className="w-fit text-left text-gray-50 transition-colors duration-200 hover:text-accent"
           >
             Logout
           </button>

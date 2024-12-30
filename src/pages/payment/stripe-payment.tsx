@@ -1,6 +1,7 @@
 import SectionHeading from '@/components/common/section-heading';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import Swal from 'sweetalert2';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
@@ -18,6 +19,9 @@ const StripePayment = () => {
             <Elements stripe={stripePromise}>
               <CheckoutForm />
             </Elements>
+          </div>
+          <div className="absolute left-5 top-5">
+            <BackButton />
           </div>
         </div>
       </div>
@@ -37,8 +41,19 @@ import { FormEvent, useEffect, useState } from 'react';
 
 import { useAppSelector } from '@/redux/hooks';
 
-import { useCreatePaymentIntentMutation } from '@/redux/api/stripePaymentApi';
+import {
+  useAddOrderMutation,
+  useCreatePaymentIntentMutation,
+} from '@/redux/api/orderApi';
+
 import { Button } from '@/components/ui/button';
+import {
+  useClearCartMutation,
+  useGetCartQuery,
+} from '@/redux/api/cartApi';
+import { ICart } from '@/interface/cart.interface';
+import BackButton from '@/components/common/back-button';
+import { IShop } from '@/interface/shop.interface';
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -48,19 +63,19 @@ const CheckoutForm = () => {
   const [transactionId, setTransactionId] = useState('');
   const [cardError, setCardError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [isCardComplete, setIsCardComplete] = useState(false);
 
   const user = useAppSelector((state) => state.auth.user);
-  // const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
-  // const {
-  //   cost: price,
-  //   date,
-  //   slots,
-  //   slotTime,
-  // } = useAppSelector((state) => state.booking);
+  const { data: cartData } = useGetCartQuery(null);
+  const [clearCartMutation] = useClearCartMutation();
+  const [addOrderMutation] = useAddOrderMutation();
 
-  const price = 85;
+  const cart: ICart = cartData?.data[0] || {};
+  const price = cart?.totalAmount;
+  const shopData = cart?.shop as IShop;
+  const shopId = shopData._id;
+  const products = cart.items;
 
   useEffect(() => {
     if (price && price > 0) {
@@ -79,12 +94,14 @@ const CheckoutForm = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
+    setProcessing(true);
 
-    if (!stripe || !elements || !clientSecret || !price) {
+    if (!stripe || !elements || !clientSecret) {
       console.error(
         'May be not getting stripe, elements and clientSecret!',
       );
       setIsLoading(false);
+      setProcessing(false);
       return;
     }
 
@@ -92,6 +109,7 @@ const CheckoutForm = () => {
     if (!card) {
       console.error('Card Element is not found.');
       setIsLoading(false);
+      setProcessing(false);
       return;
     }
 
@@ -110,6 +128,7 @@ const CheckoutForm = () => {
         setCardError(error?.message as string);
         setTransactionId('');
         setIsLoading(false);
+        setProcessing(false);
         return;
       } else {
         setCardError('');
@@ -123,69 +142,66 @@ const CheckoutForm = () => {
       if (intentError) {
         console.error('[Payment Intent Error]', intentError);
         setIsLoading(false);
+        setProcessing(false);
         return;
       }
 
       if (paymentIntent?.status === 'succeeded') {
         setTransactionId(paymentIntent.id);
         console.log('Payment succeeded:', paymentIntent);
-
-        setIsLoading(false);
-        return;
-
-        // const paymentInfo = {
-        //   userEmail: user?.email,
-        //   transactionId: paymentIntent.id,
-        //   price: price,
-        //   date: date,
-        //   slots: slots,
-        // };
+        const orderInfo = {
+          user: user?._id,
+          email: user?.email,
+          shop: shopId,
+          products: products,
+          totalAmount: price,
+          transactionId: paymentIntent.id,
+        };
 
         // 01 info alert
-        // const result = await Swal.fire({
-        //   title: 'Confirm Payment Details',
-        //   html: `
-        //       <div style="display: flex; flex-direction: column;">
-        //         <p style="font-weight: bold; color: #1a202c;">Email: ${
-        //           paymentInfo.userEmail
-        //         }</p>
-        //         <p style="font-weight: bold; color: #1a202c;">Transaction ID: ${
-        //           paymentInfo.transactionId
-        //         }</p>
-        //         <p style="font-weight: bold; color: #1a202c;">Price: $${
-        //           paymentInfo.price
-        //         }</p>
-        //         <p style="font-weight: bold; color: #1a202c;">Date: ${
-        //           paymentInfo.date
-        //         }</p>
-        //         <p style="font-weight: bold; color: #1a202c;">Slots: ${slotTime.join(
-        //           ', ',
-        //         )}</p>
-        //       </div>
-        //       `,
-        //   icon: 'info',
-        //   confirmButtonColor: '#3085d6',
-        //   confirmButtonText: 'Confirm',
-        // });
+        const result = await Swal.fire({
+          title: 'Confirm Payment Details',
+          html: `
+              <div style="display: flex; flex-direction: column;">
+                <p style="font-weight: bold; color: #1a202c;">Email: ${
+                  orderInfo.email
+                }</p>
+                <p style="font-weight: bold; color: #1a202c;">Transaction ID: ${
+                  orderInfo.transactionId
+                }</p>
+                <p style="font-weight: bold; color: #1a202c;">Price: $${
+                  orderInfo.totalAmount
+                }</p>
+              </div>
+              `,
+          icon: 'info',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Confirm',
+        });
 
         // 02 thank you alert
-        // if (result.isConfirmed) {
-        //   await Swal.fire({
-        //     title: 'Thank you!',
-        //     text: 'Your payment has been successfully processed.',
-        //     icon: 'success',
-        //     confirmButtonColor: '#3085d6',
-        //     confirmButtonText: 'Close',
-        //   });
-        //   // clear the booking from redux
-        //   // dispatch(clearBooking());
-        //   // navigate(`/dashboard/my-bookings`);
-        // }
+        if (result.isConfirmed) {
+          await Swal.fire({
+            title: 'Thank you!',
+            text: 'Your payment has been successfully processed.',
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Close',
+          });
+          // clear cart and add to order
+          await addOrderMutation(orderInfo);
+          await clearCartMutation(cart._id);
+
+          setIsLoading(true);
+          return;
+
+          // navigate(`/dashboard/my-bookings`);
+        }
       }
     } catch (error) {
       console.error('Payment Error:', error);
     } finally {
-      setIsLoading(false);
+      setProcessing(false);
     }
   };
 
@@ -231,7 +247,7 @@ const CheckoutForm = () => {
               !stripe || isLoading || !clientSecret || !isCardComplete
             }
           >
-            {isLoading ? 'Processing...' : 'Confirm'}
+            {processing ? 'Processing...' : 'Confirm'}
           </Button>
         </div>
       </form>

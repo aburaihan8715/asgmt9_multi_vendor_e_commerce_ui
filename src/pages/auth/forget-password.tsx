@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { useForgetPasswordMutation } from '@/redux/api/authApi';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { toast } from 'sonner';
+import BackButton from '@/components/common/back-button';
 
 type TForgetPasswordFormValues = {
   email: string;
@@ -43,7 +44,7 @@ const ForgetPasswordPage: React.FC = () => {
     <>
       {isLoading && <LoadingWithOverlay />}
       <div className="mt-[80px] flex h-screen items-center justify-center bg-gray-100 md:mt-0">
-        <div className="w-full max-w-md rounded-lg bg-white p-2 shadow-md md:p-8">
+        <div className="relative w-full max-w-md p-2 bg-white rounded-lg shadow-md md:p-8">
           <div>
             <SubHeading subHeading="Forget Password" />
           </div>
@@ -86,11 +87,15 @@ const ForgetPasswordPage: React.FC = () => {
 
           <div className="mt-4 text-center">
             <Link
-              to="/login"
+              to="/auth/login"
               className="text-sm text-gray-600 hover:text-primary hover:underline"
             >
               Back to Login
             </Link>
+          </div>
+
+          <div className="absolute left-5 top-5">
+            <BackButton />
           </div>
         </div>
       </div>

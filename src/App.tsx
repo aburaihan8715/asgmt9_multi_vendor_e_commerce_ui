@@ -27,6 +27,7 @@ import CheckAuth from './components/common/check-auth';
 import VendorLayout from './components/layouts/vendor-layout';
 import CustomerLayout from './components/layouts/customer-layout';
 import AuthLayout from './components/layouts/auth-layout';
+import ProductList from './pages/app-view/product-list';
 
 const App = () => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -53,6 +54,7 @@ const App = () => {
             element={<ProductDetailsPage />}
           />
           <Route path="cart" element={<CartPage />} />
+          <Route path="products" element={<ProductList />} />
         </Route>
 
         {/* ===== for auth =====*/}

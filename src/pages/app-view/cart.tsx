@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import SectionHeading from '@/components/common/section-heading';
+import defaultProductImage from '@/assets/images/default_product.jpg';
 
 import { Link } from 'react-router';
 import {
@@ -9,14 +10,16 @@ import {
   useRemoveCartItemMutation,
 } from '@/redux/api/cartApi';
 import { toast } from 'sonner';
-import LoadingWithOverlay from '@/components/common/loading-overlay';
+import { IProduct } from '@/interface/product.interface';
+import { ICartItem } from '@/interface/cart.interface';
 
 const CartPage = () => {
   const { data: cartData, isLoading: cartIsLoading } =
     useGetCartQuery(null);
-  const cartProducts = cartData?.data[0]?.items;
+  const cartProducts = cartData?.data[0]?.items || [];
   const totalAmount = cartData?.data[0]?.totalAmount;
   const subTotal = cartData?.data[0]?.totalAmount;
+  // const shop = cartData?.data[0]?.shop;
 
   if (cartIsLoading) return <div>Loading...</div>;
 
@@ -34,12 +37,12 @@ const CartPage = () => {
         <ul className="flex flex-[4] flex-col justify-center rounded border">
           {cartProducts?.length > 0 &&
             cartProducts?.map((item: any) => (
-              <CartProduct key={item.product._id} item={item} />
+              <CartProduct key={item?.product?._id} item={item} />
             ))}
 
           {cartProducts?.length < 1 && (
             <div className="flex justify-center">
-              <h3 className="text-3xl font-bold text-center text-transparent text-gray-900 sm:2xl title-font max-w-max border-primary bg-gradient-to-r from-orange-600 via-green-700 to-fuchsia-700 bg-clip-text md:text-3xl">
+              <h3 className="sm:2xl title-font max-w-max border-primary bg-gradient-to-r from-orange-600 via-green-700 to-fuchsia-700 bg-clip-text text-center text-3xl font-bold text-gray-900 text-transparent md:text-3xl">
                 No Product Added Yet!!
               </h3>
             </div>
@@ -47,14 +50,14 @@ const CartPage = () => {
         </ul>
 
         <div className="flex-[1]">
-          <div className="p-1 space-y-2 border rounded-md md:p-5">
+          <div className="space-y-2 rounded-md border p-1 md:p-5">
             <h4 className="text-2xl font-medium text-gray-700">
               Order Summary
             </h4>
 
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>$ {subTotal.toFixed(2)}</span>
+              <span>$ {subTotal?.toFixed(2) || '00.0'}</span>
             </div>
 
             <div className="flex justify-between">
@@ -69,11 +72,11 @@ const CartPage = () => {
 
             <div className="flex justify-between text-xl font-medium">
               <span>Total</span>
-              <span>$ {totalAmount.toFixed(2)}</span>
+              <span>$ {totalAmount?.toFixed(2) || '0.00'}</span>
             </div>
 
             <div>
-              {cartProducts.length < 1 ? (
+              {cartProducts?.length < 1 ? (
                 <div className="w-full cursor-not-allowed">
                   <Button disabled className="w-full cursor-not-allowed">
                     Go For Payment
@@ -94,16 +97,15 @@ const CartPage = () => {
 
 export default CartPage;
 
-const CartProduct = ({ item }: { item: any }) => {
-  const quantity = item.quantity;
-  const cartData = item.product;
+const CartProduct = ({ item }: { item: ICartItem }) => {
+  const quantity = item?.quantity;
+  const cartData = item?.product as IProduct;
+  const images = cartData?.images || [];
+  const coverImage1 = images.length > 0 && images[0];
 
-  const [incrementQuantityMutation, { isLoading: isIncrementLoading }] =
-    useIncrementQuantityMutation();
-  const [decrementQuantityMutation, { isLoading: isDecrementLoading }] =
-    useDecrementQuantityMutation();
-  const [removeCartItemMutation, { isLoading: isRemoveCartItemLoading }] =
-    useRemoveCartItemMutation();
+  const [incrementQuantityMutation] = useIncrementQuantityMutation();
+  const [decrementQuantityMutation] = useDecrementQuantityMutation();
+  const [removeCartItemMutation] = useRemoveCartItemMutation();
 
   const handleIncrement = async (productId: string) => {
     const toastId = toast.loading('loading...');
@@ -152,51 +154,60 @@ const CartProduct = ({ item }: { item: any }) => {
 
   return (
     <>
-      {(isIncrementLoading ||
+      {/* {(isIncrementLoading ||
         isDecrementLoading ||
-        isRemoveCartItemLoading) && <LoadingWithOverlay />}
-      <li className="flex flex-col items-center justify-between h-full gap-10 border-b md:flex-row">
-        <div className="">
-          <img
-            className="h-[200px] w-full rounded object-cover md:w-[200px]"
-            src="https://images.pexels.com/photos/927629/pexels-photo-927629.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            alt={`product`}
-          />
+        isRemoveCartItemLoading) && <LoadingWithOverlay />} */}
+      <li className="flex h-full flex-col items-center justify-between gap-10 border-b p-2 md:flex-row">
+        <div className="flex-[2]">
+          <div className="aspect-[16/9]">
+            {/* Set the aspect ratio here */}
+            <img
+              src={coverImage1 || defaultProductImage}
+              alt="product"
+              className="h-full w-full rounded object-cover"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col flex-1 gap-4">
+        <div className="flex flex-[5] flex-col gap-4">
           <h4 className="text-xl font-medium md:text-3xl">
-            {cartData.name}
+            {cartData?.name}
           </h4>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handleDecrement(cartData._id)}
-              className="text-2xl"
-            >
-              -
-            </button>
-            <span className="flex items-center justify-center w-10 h-10 border">
-              {quantity || 1}
-            </span>
-            <button
-              onClick={() => handleIncrement(cartData._id)}
-              className="text-2xl"
-            >
-              +
-            </button>
-          </div>
+          <p>{cartData.description}</p>
           <div className="text-xl text-gray-700 md:text-3xl">
-            $ {cartData.price}
+            $ {cartData?.price}
           </div>
-        </div>
 
-        <div className="w-full md:w-auto">
-          <Button
-            className="w-full mr-1 md:mr-20 md:w-auto"
-            onClick={() => handleRemoveCartItem(cartData._id)}
-          >
-            Remove
-          </Button>
+          <div className="flex">
+            <div className="flex w-1/3 gap-10">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleDecrement(cartData?._id)}
+                  className="text-2xl"
+                >
+                  -
+                </button>
+                <span className="flex h-10 w-10 items-center justify-center border">
+                  {quantity || 1}
+                </span>
+                <button
+                  onClick={() => handleIncrement(cartData?._id)}
+                  className="text-2xl"
+                >
+                  +
+                </button>
+              </div>
+
+              <div className="flex w-full md:w-auto">
+                <Button
+                  className="mr-1 border md:mr-20 md:w-auto"
+                  onClick={() => handleRemoveCartItem(cartData?._id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </li>
     </>
