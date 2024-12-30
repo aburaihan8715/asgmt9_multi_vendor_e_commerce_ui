@@ -12,11 +12,11 @@ import { useState } from 'react';
 
 const ProductList = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { searchQuery, sortValue } = useAppSelector(
+  const { searchQuery, sortValue, priceRangeValue } = useAppSelector(
     (state: RootState) => state.productFilter,
   );
 
-  console.log(sortValue);
+  // console.log(priceRangeValue);
 
   const itemsPerPage = 10;
   const { data: productData, isLoading } = useGetAllProductsQuery({
@@ -24,6 +24,7 @@ const ProductList = () => {
     limit: itemsPerPage,
     searchQuery,
     sortValue,
+    priceRangeValue,
   });
   const result = productData?.data?.result;
   const meta = productData?.data?.meta;

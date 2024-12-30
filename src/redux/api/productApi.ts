@@ -14,7 +14,13 @@ const productApi = baseApi.injectEndpoints({
 
     // GET ALL PRODUCTS
     getAllProducts: builder.query({
-      query: ({ searchQuery, page, limit, sortValue }) => {
+      query: ({
+        searchQuery,
+        page,
+        limit,
+        sortValue,
+        priceRangeValue,
+      }) => {
         let queryString = `/api/v1/products`;
 
         const params = new URLSearchParams();
@@ -22,6 +28,7 @@ const productApi = baseApi.injectEndpoints({
         if (searchQuery) params.append('searchTerm', searchQuery);
         if (page) params.append('page', page);
         if (limit) params.append('limit', limit);
+
         if (sortValue) {
           if (sortValue === 'asc') {
             params.append('sort', 'name');
@@ -33,6 +40,30 @@ const productApi = baseApi.injectEndpoints({
             params.append('sort', 'price');
           } else if (sortValue === 'default') {
             params.append('sort', '');
+          }
+        }
+
+        if (priceRangeValue) {
+          if (priceRangeValue === 'default') {
+            params.append('price[gt]', '0');
+          } else if (priceRangeValue === '1-30') {
+            const minValue = priceRangeValue.split('-')[0];
+            const maxValue = priceRangeValue.split('-')[1];
+            params.append('price[gte]', minValue);
+            params.append('price[lte]', maxValue);
+          } else if (priceRangeValue === '30-60') {
+            const minValue = priceRangeValue.split('-')[0];
+            const maxValue = priceRangeValue.split('-')[1];
+            params.append('price[gte]', minValue);
+            params.append('price[lte]', maxValue);
+          } else if (priceRangeValue === '60-100') {
+            const minValue = priceRangeValue.split('-')[0];
+            const maxValue = priceRangeValue.split('-')[1];
+            params.append('price[gte]', minValue);
+            params.append('price[lte]', maxValue);
+          } else if (priceRangeValue === '100-plus') {
+            const value = priceRangeValue.split('-')[0];
+            params.append('price[gte]', value);
           }
         }
 
