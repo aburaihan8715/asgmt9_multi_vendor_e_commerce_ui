@@ -5,7 +5,7 @@ import FilterClearButton from './filter-clear-button';
 
 const ProductFilterBar = () => {
   return (
-    <section>
+    <section className="">
       <div className="flex">
         <h3 className="flex-1 mb-3 text-xl font-semibold">Filters:</h3>
         <FilterClearButton />

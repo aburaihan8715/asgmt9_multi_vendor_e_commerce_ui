@@ -43,6 +43,7 @@ const productApi = baseApi.injectEndpoints({
           }
         }
 
+        // NOTE: Repetition can be avoided by making function but not now
         if (priceRangeValue) {
           if (priceRangeValue === 'default') {
             params.append('price[gt]', '0');
