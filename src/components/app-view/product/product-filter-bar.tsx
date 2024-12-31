@@ -1,4 +1,4 @@
-import { ProductCheckCategory } from './product-check-category';
+import { ProductRadioCategory } from './product-radio-category';
 import ProductRadioShop from './product-radio-shop';
 import ProductRadioPriceRange from './product-radio-price-range';
 import FilterClearButton from './filter-clear-button';
@@ -7,13 +7,12 @@ const ProductFilterBar = () => {
   return (
     <section className="">
       <div className="flex">
-        <h3 className="flex-1 mb-3 text-xl font-semibold">Filters:</h3>
-        <FilterClearButton />
+        <h3 className="mb-3 flex-1 text-xl font-semibold">Filters:</h3>
       </div>
       <div className="space-y-10">
         <div className="space-y-1">
           <h5 className="font-semibold">Category</h5>
-          <ProductCheckCategory />
+          <ProductRadioCategory />
         </div>
 
         <div className="space-y-1">
@@ -24,6 +23,9 @@ const ProductFilterBar = () => {
         <div className="space-y-1">
           <h5 className="font-semibold">Price Range</h5>
           <ProductRadioPriceRange />
+        </div>
+        <div>
+          <FilterClearButton />
         </div>
       </div>
     </section>

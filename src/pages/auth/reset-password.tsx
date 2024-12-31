@@ -7,7 +7,7 @@ import { AuthSchema } from '@/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
 import SubHeading from '@/components/common/sub-heading';
 import { Link, useSearchParams } from 'react-router';
-import { useResetPasswordMutation } from '@/redux/api/authApi';
+import { useResetPasswordMutation } from '@/redux/features/auth/authApi';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { toast } from 'sonner';
 import BackButton from '@/components/common/back-button';
@@ -63,7 +63,7 @@ const ResetPasswordPage: React.FC = () => {
     <>
       {isLoading && <LoadingWithOverlay />}
       <div className="mt-[80px] flex min-h-screen items-center justify-center bg-gray-100 md:mt-0">
-        <div className="relative w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <div className="relative w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md">
           <div>
             <SubHeading subHeading="Reset Password" />
           </div>
@@ -94,7 +94,7 @@ const ResetPasswordPage: React.FC = () => {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute text-gray-600 right-3 top-9 focus:outline-none"
+                className="absolute right-3 top-9 text-gray-600 focus:outline-none"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>

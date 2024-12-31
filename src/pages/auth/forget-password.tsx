@@ -4,7 +4,7 @@ import { AuthSchema } from '@/schemas/auth.schema';
 import { Button } from '@/components/ui/button';
 import SubHeading from '@/components/common/sub-heading';
 import { Link } from 'react-router';
-import { useForgetPasswordMutation } from '@/redux/api/authApi';
+import { useForgetPasswordMutation } from '@/redux/features/auth/authApi';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { toast } from 'sonner';
 import BackButton from '@/components/common/back-button';
@@ -44,7 +44,7 @@ const ForgetPasswordPage: React.FC = () => {
     <>
       {isLoading && <LoadingWithOverlay />}
       <div className="mt-[80px] flex h-screen items-center justify-center bg-gray-100 md:mt-0">
-        <div className="relative w-full max-w-md p-2 bg-white rounded-lg shadow-md md:p-8">
+        <div className="relative w-full max-w-md rounded-lg bg-white p-2 shadow-md md:p-8">
           <div>
             <SubHeading subHeading="Forget Password" />
           </div>

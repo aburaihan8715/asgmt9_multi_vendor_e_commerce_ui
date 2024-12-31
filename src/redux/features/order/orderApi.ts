@@ -1,4 +1,4 @@
-import { baseApi } from '@/redux/api/baseApi';
+import { baseApi } from '@/redux/base-api';
 
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

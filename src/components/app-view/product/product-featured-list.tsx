@@ -1,4 +1,4 @@
-import { useGetFeaturedProductsQuery } from '@/redux/api/productApi';
+import { useGetFeaturedProductsQuery } from '@/redux/features/product/productApi';
 import ProductCard from './product-card';
 import SubHeading from '@/components/common/sub-heading';
 import { useLocation } from 'react-router';

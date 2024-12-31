@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import SectionHeading from '@/components/common/section-heading';
 import { AuthSchema } from '@/schemas/auth.schema';
-import { useChangePasswordMutation } from '@/redux/api/authApi';
+import { useChangePasswordMutation } from '@/redux/features/auth/authApi';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -57,8 +57,8 @@ const ChangePasswordPage = () => {
   return (
     <>
       {isLoading && <LoadingWithOverlay />}
-      <div className="flex items-center justify-center min-h-screen py-10 bg-gray-100 md:mt-0">
-        <div className="relative w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 py-10 md:mt-0">
+        <div className="relative w-full max-w-lg space-y-6 rounded-lg bg-white p-8 shadow-md">
           <div className="flex justify-center">
             <SectionHeading heading="Change password" />
           </div>
@@ -81,7 +81,7 @@ const ChangePasswordPage = () => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('oldPassword')}
-                  className="absolute inset-y-0 flex items-center text-gray-500 right-3"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
                 >
                   {showPassword.oldPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -110,7 +110,7 @@ const ChangePasswordPage = () => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('newPassword')}
-                  className="absolute inset-y-0 flex items-center text-gray-500 right-3"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
                 >
                   {showPassword.newPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>

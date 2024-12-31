@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './features/authSlice';
-import productFilterReducer from './features/product-filter-slice';
+import authReducer from './features/auth/authSlice';
+import productFilterReducer from './features/product/product-filter-slice';
 
-import { baseApi } from './api/baseApi';
+import { baseApi } from './base-api';
 import storage from 'redux-persist/lib/storage';
 import {
   persistStore,

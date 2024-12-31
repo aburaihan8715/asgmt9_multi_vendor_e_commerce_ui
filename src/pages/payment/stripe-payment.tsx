@@ -44,13 +44,13 @@ import { useAppSelector } from '@/redux/hooks';
 import {
   useAddOrderMutation,
   useCreatePaymentIntentMutation,
-} from '@/redux/api/orderApi';
+} from '@/redux/features/order/orderApi';
 
 import { Button } from '@/components/ui/button';
 import {
   useClearCartMutation,
   useGetCartQuery,
-} from '@/redux/api/cartApi';
+} from '@/redux/features/cart/cartApi';
 import { ICart } from '@/interface/cart.interface';
 import BackButton from '@/components/common/back-button';
 import { IShop } from '@/interface/shop.interface';

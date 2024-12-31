@@ -1,6 +1,6 @@
 import SubHeading from '@/components/common/sub-heading';
 
-import { useGetAllProductsQuery } from '@/redux/api/productApi';
+import { useGetAllProductsQuery } from '@/redux/features/product/productApi';
 import CategoryCard from './category-cart';
 import { IProduct } from '@/interface/product.interface';
 

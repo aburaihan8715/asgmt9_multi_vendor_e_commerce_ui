@@ -6,15 +6,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { setSortValue } from '@/redux/features/product-filter-slice';
-import { useAppDispatch } from '@/redux/hooks';
+import { setSortValue } from '@/redux/features/product/product-filter-slice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { RootState } from '@/redux/store';
 import { FaSortAlphaDownAlt } from 'react-icons/fa';
 
 export function ProductSort() {
   const dispatch = useAppDispatch();
+  const { sortValue } = useAppSelector(
+    (state: RootState) => state.productFilter,
+  );
 
   return (
-    <Select onValueChange={(value) => dispatch(setSortValue(value))}>
+    <Select
+      value={sortValue || ''}
+      onValueChange={(value) => dispatch(setSortValue(value))}
+    >
       <SelectTrigger className="w-[180px]">
         <FaSortAlphaDownAlt />
         <SelectValue placeholder="Sort by" />

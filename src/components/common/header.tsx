@@ -13,8 +13,8 @@ import { Button } from '../ui/button';
 import defaultUser from '@/assets/images/defaultUser.png';
 import { ShoppingCart } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { logout } from '@/redux/features/authSlice';
-import { useGetCartQuery } from '@/redux/api/cartApi';
+import { logout } from '@/redux/features/auth/authSlice';
+import { useGetCartQuery } from '@/redux/features/cart/cartApi';
 
 // HEADER COMPONENT
 const Header = () => {

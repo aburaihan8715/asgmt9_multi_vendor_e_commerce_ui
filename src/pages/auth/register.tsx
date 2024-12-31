@@ -7,11 +7,11 @@ import { motion } from 'motion/react';
 import SectionHeading from '@/components/common/section-heading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, Navigate, useNavigate } from 'react-router';
-import { useUserRegisterMutation } from '@/redux/api/userApi';
+import { useUserRegisterMutation } from '@/redux/features/user/userApi';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { toast } from 'sonner';
 import { UserSchema } from '@/schemas/user.schema';
-import { setUser } from '@/redux/features/authSlice';
+import { setUser } from '@/redux/features/auth/authSlice';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/common/back-button';
@@ -79,14 +79,14 @@ const RegisterPage = () => {
       <div className="relative mt-[80px] flex min-h-screen justify-center bg-gray-50 bg-[url('https://images.pexels.com/photos/927629/pexels-photo-927629.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover bg-center bg-no-repeat sm:px-6 md:mt-0 md:py-12 lg:px-8">
         <div className="absolute inset-0 bg-black opacity-50"></div>
 
-        <div className="relative z-10 flex justify-center w-full">
+        <div className="relative z-10 flex w-full justify-center">
           <motion.div
-            className="relative w-full max-w-md p-1 bg-white rounded shadow md:p-8"
+            className="relative w-full max-w-md rounded bg-white p-1 shadow md:p-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex justify-center mb-6">
+            <div className="mb-6 flex justify-center">
               <SectionHeading heading="Register" />
             </div>
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -170,7 +170,7 @@ const RegisterPage = () => {
                     <button
                       type="button"
                       onClick={togglePasswordVisibility}
-                      className="absolute inset-y-0 flex items-center text-gray-500 right-3 hover:text-green-700"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-green-700"
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -211,7 +211,7 @@ const RegisterPage = () => {
                     <button
                       type="button"
                       onClick={togglePasswordConfirmVisibility}
-                      className="absolute inset-y-0 flex items-center text-gray-500 right-3 hover:text-green-700"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-green-700"
                     >
                       {showPasswordConfirm ? <FaEyeSlash /> : <FaEye />}
                     </button>

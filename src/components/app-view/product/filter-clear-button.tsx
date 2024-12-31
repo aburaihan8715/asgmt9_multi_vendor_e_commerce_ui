@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { clearFilters } from '@/redux/features/product-filter-slice';
+import { clearFilters } from '@/redux/features/product/product-filter-slice';
 import { useAppDispatch } from '@/redux/hooks';
 
 const FilterClearButton = () => {
@@ -8,7 +8,7 @@ const FilterClearButton = () => {
     dispatch(clearFilters());
   };
   return (
-    <Button onClick={() => handleClearFilters()} className="flex-1 w-full">
+    <Button onClick={() => handleClearFilters()} className="w-full flex-1">
       Clear filter
     </Button>
   );

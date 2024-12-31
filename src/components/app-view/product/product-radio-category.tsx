@@ -1,8 +1,8 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { IShop } from '@/interface/shop.interface';
-import { setShopValue } from '@/redux/features/product/product-filter-slice';
-import { useGetAllShopsQuery } from '@/redux/features/shop/shop-api';
+import { ICategory } from '@/interface/category.interface';
+import { useGetAllCategoriesQuery } from '@/redux/features/category/category-api';
+import { setCategoryValue } from '@/redux/features/product/product-filter-slice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
 
@@ -10,31 +10,32 @@ interface IItem {
   label: string;
   value: string;
 }
-const ProductRadioShop = () => {
+
+export function ProductRadioCategory() {
   const dispatch = useAppDispatch();
-  const { shopValue } = useAppSelector(
+  const { categoryValue } = useAppSelector(
     (state: RootState) => state.productFilter,
   );
-  const { data: shopData, isLoading: isShopLoading } =
-    useGetAllShopsQuery(null);
+  const { data: categoryData, isLoading: isCategoryLoading } =
+    useGetAllCategoriesQuery(null);
 
-  const shops = shopData?.data || [];
+  const categories = categoryData?.data || [];
 
-  const itemsData = shops?.map((item: IShop) => {
+  const itemsData = categories?.map((item: ICategory) => {
     return {
       label: item.name,
       value: item._id,
     };
   });
 
-  if (isShopLoading) {
-    return 'loading shops...';
+  if (isCategoryLoading) {
+    return 'loading category...';
   }
 
   return (
     <RadioGroup
-      value={shopValue || ''}
-      onValueChange={(value) => dispatch(setShopValue(value))}
+      value={categoryValue || ''}
+      onValueChange={(value) => dispatch(setCategoryValue(value))}
     >
       {itemsData?.map((item: IItem) => (
         <div key={item?.label} className="flex items-center space-x-2">
@@ -44,6 +45,4 @@ const ProductRadioShop = () => {
       ))}
     </RadioGroup>
   );
-};
-
-export default ProductRadioShop;
+}

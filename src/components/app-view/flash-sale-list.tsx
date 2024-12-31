@@ -1,6 +1,6 @@
 import SubHeading from '@/components/common/sub-heading';
 import FlashSaleCard from './flash-sale-card';
-import { useGetAllProductsQuery } from '@/redux/api/productApi';
+import { useGetAllProductsQuery } from '@/redux/features/product/productApi';
 import { IProduct } from '@/interface/product.interface';
 
 const FlashSaleList = () => {

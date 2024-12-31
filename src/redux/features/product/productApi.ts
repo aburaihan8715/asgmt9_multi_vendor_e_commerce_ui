@@ -1,4 +1,4 @@
-import { baseApi } from '@/redux/api/baseApi';
+import { baseApi } from '@/redux/base-api';
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,6 +20,8 @@ const productApi = baseApi.injectEndpoints({
         limit,
         sortValue,
         priceRangeValue,
+        shopValue,
+        categoryValue,
       }) => {
         let queryString = `/api/v1/products`;
 
@@ -66,6 +68,14 @@ const productApi = baseApi.injectEndpoints({
             const value = priceRangeValue.split('-')[0];
             params.append('price[gte]', value);
           }
+        }
+
+        if (shopValue) {
+          params.append('shop', shopValue);
+        }
+
+        if (categoryValue) {
+          params.append('category', categoryValue);
         }
 
         if (params.toString()) queryString += `?${params.toString()}`;

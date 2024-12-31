@@ -1,7 +1,8 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { setPriceRangeValue } from '@/redux/features/product-filter-slice';
-import { useAppDispatch } from '@/redux/hooks';
+import { setPriceRangeValue } from '@/redux/features/product/product-filter-slice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { RootState } from '@/redux/store';
 
 const priceRanges = [
   { id: 'item1', value: 'default', label: '(default)' },
@@ -13,9 +14,13 @@ const priceRanges = [
 
 const ProductRadioPriceRange = () => {
   const dispatch = useAppDispatch();
+  const { priceRangeValue } = useAppSelector(
+    (state: RootState) => state.productFilter,
+  );
 
   return (
     <RadioGroup
+      value={priceRangeValue || ''}
       onValueChange={(value) => dispatch(setPriceRangeValue(value))}
     >
       {priceRanges.map((range) => (

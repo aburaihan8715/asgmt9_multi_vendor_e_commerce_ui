@@ -8,7 +8,7 @@ import {
   useGetCartQuery,
   useIncrementQuantityMutation,
   useRemoveCartItemMutation,
-} from '@/redux/api/cartApi';
+} from '@/redux/features/cart/cartApi';
 import { toast } from 'sonner';
 import { IProduct } from '@/interface/product.interface';
 import { ICartItem } from '@/interface/cart.interface';

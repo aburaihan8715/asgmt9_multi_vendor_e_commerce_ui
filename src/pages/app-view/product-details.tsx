@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import LoadingWithOverlay from '@/components/common/loading-overlay';
 import { IProduct } from '@/interface/product.interface';
-import { useGetSingleProductQuery } from '@/redux/api/productApi';
+import { useGetSingleProductQuery } from '@/redux/features/product/productApi';
 import { useAppSelector } from '@/redux/hooks';
 
 import { Rating } from '@smastrom/react-rating';
@@ -12,7 +12,7 @@ import defaultProductImage from '@/assets/images/default_product.jpg';
 import {
   useAddToCartMutation,
   useGetCartQuery,
-} from '@/redux/api/cartApi';
+} from '@/redux/features/cart/cartApi';
 import { ICartItem } from '@/interface/cart.interface';
 
 const ProductDetails = () => {
